@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Records - Works Records System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen">
+        <aside class="w-64 bg-slate-900 text-white flex flex-col p-4">
+            <h1 class="text-xl font-bold mb-8 text-teal-400">Works Records</h1>
+            <nav class="space-y-3">
+                <a href="/" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Dashboard</a>
+                <a href="/records/register" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Register Record</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-8 overflow-y-auto">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Search Registered Records</h2>
+
+            <form th:action="@{/records/search}" method="get" class="flex gap-4 mb-8">
+                <input type="text" name="query" th:value="${query}" placeholder="Search by Owner Name, Plot No, Permit No, Digital Address, Town, Phone..." 
+                       class="flex-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 rounded-lg shadow">
+                    Search
+                </button>
+            </form>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b text-gray-600 text-sm bg-gray-50">
+                            <th class="p-3">Owner Name</th>
+                            <th class="p-3">Plot No.</th>
+                            <th class="p-3">Permit No.</th>
+                            <th class="p-3">Town</th>
+                            <th class="p-3">Status</th>
+                            <th class="p-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="rec : ${records}" class="border-b hover:bg-gray-50 text-sm text-gray-700">
+                            <td class="p-3" th:text="${rec.propertyOwnerName}">John Doe</td>
+                            <td class="p-3" th:text="${rec.plotNumber}">PLT-102</td>
+                            <td class="p-3" th:text="${rec.permitNumber}">PM-9021</td>
+                            <td class="p-3" th:text="${rec.town}">Kumasi</td>
+                            <td class="p-3">
+                                <span class="px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-800" th:text="${rec.status}">PENDING</span>
+                            </td>
+                            <td class="p-3">
+                                <a th:href="@{/records/view/{id}(id=${rec.id})}" class="text-teal-600 font-semibold hover:underline">View Record</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(records)}">
+                            <td colspan="6" class="p-4 text-center text-gray-500">No matching records found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

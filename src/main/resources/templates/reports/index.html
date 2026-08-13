@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports - Works Records System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .bg-page-reports {
+            background-image: linear-gradient(
+                to right bottom,
+                rgba(241, 245, 249, 0.20),
+                rgba(241, 245, 249, 0.10)
+            ),
+            url('/images/dashboard-bg3.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen print:h-auto">
+        <aside class="w-64 bg-slate-900 text-white flex flex-col p-4 print:hidden">
+            <h1 class="text-xl font-bold mb-8 text-teal-400">Works Records</h1>
+            <nav class="space-y-3">
+                <a href="/" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Dashboard</a>
+                <a href="/records/register" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Register Record</a>
+                <a href="/reports" class="block py-2 px-4 rounded bg-slate-800 text-teal-300 font-semibold">Reports & Audit</a>
+            </nav>
+        </aside>
+
+        <!-- Applied bg-page-reports here -->
+        <main class="flex-1 p-8 overflow-y-auto bg-page-reports">
+            <div class="flex justify-between items-center mb-6 print:hidden">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800"></h2>
+                </div>
+                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 px-4 rounded shadow text-sm">
+                    Print Report / Save PDF
+                </button>
+            </div>
+
+            <div class="hidden print:block mb-6 text-center border-b pb-4">
+                <h1 class="text-3xl font-bold text-gray-900">Works Records Management System</h1>
+                <h2 class="text-xl font-semibold text-gray-700 mt-1" th:text="${activeFilter}">Report Summary</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 print:hidden">
+                <a href="/reports/approved" class="bg-white/90 backdrop-blur-md p-5 rounded-lg shadow-sm border border-l-4 border-l-green-500 hover:shadow-md transition">
+                    <span class="text-xs font-bold uppercase text-gray-500">Approved Permits</span>
+                    <p class="text-2xl font-bold text-green-600 mt-1" th:text="${approvedCount}">0</p>
+                </a>
+                <a href="/reports/pending" class="bg-white/90 backdrop-blur-md p-5 rounded-lg shadow-sm border border-l-4 border-l-yellow-500 hover:shadow-md transition">
+                    <span class="text-xs font-bold uppercase text-gray-500">Pending Permits</span>
+                    <p class="text-2xl font-bold text-yellow-600 mt-1" th:text="${pendingCount}">0</p>
+                </a>
+                <a href="/reports" class="bg-white/90 backdrop-blur-md p-5 rounded-lg shadow-sm border border-l-4 border-l-teal-500 hover:shadow-md transition">
+                    <span class="text-xs font-bold uppercase text-gray-500">Total Records</span>
+                    <p class="text-2xl font-bold text-slate-800 mt-1" th:text="${totalCount}">0</p>
+                </a>
+            </div>
+
+            <div class="bg-white/90 backdrop-blur-md p-4 rounded-lg shadow-sm border mb-6 print:hidden space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap gap-2">
+                        <a href="/reports" class="px-3 py-1.5 bg-gray-100/80 hover:bg-gray-200 text-gray-700 rounded text-sm font-medium">All Records</a>
+                        <a href="/reports/approved" class="px-3 py-1.5 bg-green-50 text-green-700 hover:bg-green-100 rounded text-sm font-medium">Approved Permits</a>
+                        <a href="/reports/pending" class="px-3 py-1.5 bg-yellow-50 text-yellow-700 hover:bg-yellow-100 rounded text-sm font-medium">Pending Permits</a>
+                        <a href="/reports/monthly" class="px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded text-sm font-medium">This Month</a>
+                        <a href="/reports/yearly" class="px-3 py-1.5 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded text-sm font-medium">This Year</a>
+                    </div>
+
+                    <form th:action="@{/reports/search}" method="get" class="flex gap-2">
+                        <input type="text" name="query" th:value="${query}" placeholder="Search history/records..." class="p-2 border rounded-md text-sm w-64 focus:ring-2 focus:ring-teal-500 bg-white/80">
+                        <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded text-sm font-semibold">Search</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="bg-white/95 backdrop-blur-md rounded-lg shadow-sm border overflow-hidden">
+                <div class="p-4 border-b bg-gray-50/80 flex justify-between items-center">
+                    <h3 class="font-bold text-gray-700" th:text="${activeFilter}">All Records</h3>
+                    <span class="text-xs text-gray-500" th:text="${#lists.size(records)} + ' record(s) found'">0 records</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100/80 text-gray-700 font-semibold border-b">
+                                <th class="p-3">App No</th>
+                                <th class="p-3">Owner Name</th>
+                                <th class="p-3">Contact</th>
+                                <th class="p-3">Plot No</th>
+                                <th class="p-3">District</th>
+                                <th class="p-3">Development</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3 print:hidden">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr th:if="${#lists.isEmpty(records)}">
+                                <td colspan="8" class="p-4 text-center text-gray-500">No records found for this report filter.</td>
+                            </tr>
+                            <tr th:each="rec : ${records}" class="hover:bg-gray-50/50">
+                                <td class="p-3 font-medium text-slate-900" th:text="${rec.applicationNumber}">APP-001</td>
+                                <td class="p-3" th:text="${rec.propertyOwnerName}">Owner Name</td>
+                                <td class="p-3" th:text="${rec.contactNumber}">0000000000</td>
+                                <td class="p-3" th:text="${rec.plotNumber}">Plot 1</td>
+                                <td class="p-3" th:text="${rec.district}">District</td>
+                                <td class="p-3" th:text="${rec.developmentType}">Residential</td>
+                                <td class="p-3">
+                                    <span th:classappend="${rec.status.name() == 'APPROVED' ? 'bg-green-100 text-green-800' : (rec.status.name() == 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800')}"
+                                          class="px-2 py-0.5 rounded text-xs font-semibold" 
+                                          th:text="${rec.status}">PENDING</span>
+                                </td>
+                                <td class="p-3 print:hidden">
+                                    <a th:href="@{/records/view/{id}(id=${rec.id})}" class="text-teal-600 hover:underline font-semibold">View</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

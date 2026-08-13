@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register New Record - Works Records System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .bg-page {
+            background-image: linear-gradient(
+                to right bottom,
+                rgba(241, 245, 249, 0.20),
+                rgba(241, 245, 249, 0.10)
+            ),
+            url('/images/dashboard-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen">
+        <aside class="w-64 bg-slate-900 text-white flex flex-col p-4">
+            <h1 class="text-xl font-bold mb-8 text-teal-400">Works Records</h1>
+            <nav class="space-y-3">
+                <a href="/" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Dashboard</a>
+                <a href="/records/register" class="block py-2 px-4 rounded bg-slate-800 text-teal-300 font-semibold">Register Record</a>
+                <a href="/reports" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Reports & Audit</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-8 overflow-y-auto bg-page">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Register New Record</h2>
+
+            <form th:action="@{/records/save}" th:object="${record}" method="post" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-sm space-y-6">
+                
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Property Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Property Owner's Name</label>
+                            <input type="text" th:field="*{propertyOwnerName}" required class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Applicant Name</label>
+                            <input type="text" th:field="*{applicantName}" class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Contact Number</label>
+                            <input type="text" th:field="*{contactNumber}" required class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Plot Number</label>
+                            <input type="text" th:field="*{plotNumber}" required class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Digital Address</label>
+                            <input type="text" th:field="*{digitalAddress}" class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">GPS Coordinates (Optional)</label>
+                            <input type="text" th:field="*{gpsCoordinates}" class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Permit Number</label>
+                            <input type="text" th:field="*{permitNumber}" class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Building Permit Number</label>
+                            <input type="text" th:field="*{buildingPermitNumber}" class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Application Number</label>
+                            <input type="text" th:field="*{applicationNumber}" class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Land Title Number (Optional)</label>
+                            <input type="text" th:field="*{landTitleNumber}" class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Location Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Region</label>
+                            <select th:field="*{region}" class="mt-1 w-full p-2 border rounded-md bg-gray-50">
+                                <option value="Ashanti Region">Ashanti Region</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">District / Sub-Metro</label>
+                            <select th:field="*{district}" required class="mt-1 w-full p-2 border rounded-md bg-white focus:ring-2 focus:ring-teal-500">
+                                <option value="">-- Select District --</option>
+                                <option value="Bantama">Bantama</option>
+                                <option value="Manhyia North">Manhyia North</option>
+                                <option value="Manhyia South">Manhyia South</option>
+                                <option value="Nhyiaeso">Nhyiaeso</option>
+                                <option value="Subin">Subin</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Town</label>
+                            <input type="text" th:field="*{town}" class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Electoral Area</label>
+                            <input type="text" th:field="*{electoralArea}" class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Street Name</label>
+                            <input type="text" th:field="*{streetName}" class="mt-1 w-full p-2 border rounded-md">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Project Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Type of Development</label>
+                            <select th:field="*{developmentType}" class="mt-1 w-full p-2 border rounded-md">
+                                <option value="RESIDENTIAL">Residential</option>
+                                <option value="COMMERCIAL">Commercial</option>
+                                <option value="INDUSTRIAL">Industrial</option>
+                                <option value="INSTITUTIONAL">Institutional</option>
+                                <option value="MIXED_USE">Mixed Use</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Upload Documents</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Document Type</label>
+                            <select name="categories" class="mt-1 w-full p-2 border rounded-md">
+                                <option value="Site Plan">Site Plan</option>
+                                <option value="Building Plan">Building Plan</option>
+                                <option value="Permit">Permit</option>
+                                <option value="Land Certificate">Land Certificate</option>
+                                <option value="Survey Plan">Survey Plan</option>
+                                <option value="Inspection Report">Inspection Report</option>
+                                <option value="Other Attachments">Other Attachments</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">File Attachment (PDF, JPG, PNG)</label>
+                            <input type="file" name="files" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 w-full p-1.5 border rounded-md bg-gray-50">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 text-right">
+                    <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-6 rounded-md shadow">
+                        Save & Register Record
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+</body>
+</html>
