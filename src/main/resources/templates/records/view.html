@@ -55,6 +55,8 @@
                         <div><span class="text-gray-500 block">Digital Address:</span> <p class="font-medium" th:text="${record.digitalAddress}"></p></div>
                         <div><span class="text-gray-500 block">GPS Coordinates:</span> <p class="font-medium" th:text="${record.gpsCoordinates}"></p></div>
                         <div><span class="text-gray-500 block">Permit No:</span> <p class="font-medium" th:text="${record.permitNumber}"></p></div>
+                        <div><span class="text-gray-500 block">Building Permit No:</span> <p class="font-medium" th:text="${record.buildingPermitNumber}"></p></div>
+                        <div><span class="text-gray-500 block">Land Title No:</span> <p class="font-medium" th:text="${record.landTitleNumber}"></p></div>
                     </div>
                 </div>
 
@@ -69,6 +71,24 @@
                     </div>
                 </div>
 
+                <!-- PROJECT & FINANCIAL INFORMATION SECTION -->
+                <div class="border-t pt-4">
+                    <h3 class="text-md font-bold text-gray-700 uppercase tracking-wider mb-3">Project & Financial Information</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-500 block">Development Type:</span>
+                            <p class="font-medium" th:text="${record.developmentType}">RESIDENTIAL</p>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block">Amount Paid:</span>
+                            <p class="font-semibold text-teal-700" 
+                               th:text="${record.amountPaid != null} ? 'GH₵ ' + ${#numbers.formatDecimal(record.amountPaid, 1, 'COMMA', 2, 'POINT')} : 'GH₵ 0.00'">
+                                GH₵ 0.00
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="border-t pt-4 print:hidden">
                     <h3 class="text-md font-bold text-gray-700 uppercase tracking-wider mb-3">Uploaded Documents</h3>
                     <div th:if="${#lists.isEmpty(record.documents)}" class="text-sm text-gray-500">No documents attached.</div>
@@ -78,7 +98,6 @@
                                 <span class="font-semibold text-gray-800" th:text="${doc.documentCategory}">Category</span>
                                 <span class="text-gray-500 text-xs block" th:text="${doc.fileName}">file.pdf</span>
                             </div>
-                            <!-- UPDATED DOWNLOAD LINK -->
                             <a th:href="@{'/records/download/' + ${#strings.replace(doc.filePath, '/uploads/', '')}}" 
                                class="text-teal-600 font-semibold hover:underline bg-teal-50 px-3 py-1 rounded border border-teal-200 shadow-sm">
                                 Download File

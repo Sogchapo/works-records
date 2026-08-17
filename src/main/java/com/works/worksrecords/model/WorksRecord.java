@@ -2,6 +2,7 @@ package com.works.worksrecords.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,8 @@ public class WorksRecord {
     private String buildingPermitNumber;
     private String applicationNumber;
     private String landTitleNumber;
+
+    private BigDecimal amountPaid;
 
     private String region = "Ashanti Region";
     private String district;

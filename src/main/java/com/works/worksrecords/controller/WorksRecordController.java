@@ -116,6 +116,7 @@ public class WorksRecordController {
         existingRecord.setBuildingPermitNumber(updatedRecord.getBuildingPermitNumber());
         existingRecord.setApplicationNumber(updatedRecord.getApplicationNumber());
         existingRecord.setLandTitleNumber(updatedRecord.getLandTitleNumber());
+        existingRecord.setAmountPaid(updatedRecord.getAmountPaid());
         existingRecord.setRegion(updatedRecord.getRegion());
         existingRecord.setDistrict(updatedRecord.getDistrict());
         existingRecord.setTown(updatedRecord.getTown());
@@ -124,6 +125,7 @@ public class WorksRecordController {
         existingRecord.setDevelopmentType(updatedRecord.getDevelopmentType());
         existingRecord.setStatus(updatedRecord.getStatus());
 
+        // Process new uploaded files appended during edit
         if (files != null && files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 MultipartFile file = files[i];
@@ -144,17 +146,33 @@ public class WorksRecordController {
         return "redirect:/records/view/" + id;
     }
 
+    // --- DELETE INDIVIDUAL DOCUMENT ---
+    @GetMapping("/documents/delete/{docId}")
+    public String deleteDocument(@PathVariable Long docId) {
+        WorksRecord record = worksRecordRepository.findAll().stream()
+                .filter(r -> r.getDocuments().stream().anyMatch(d -> d.getId().equals(docId)))
+                .findFirst()
+                .orElse(null);
+
+        if (record != null) {
+            record.getDocuments().removeIf(doc -> doc.getId().equals(docId));
+            worksRecordRepository.save(record);
+            return "redirect:/records/edit/" + record.getId();
+        }
+
+        return "redirect:/";
+    }
+
     @GetMapping("/delete/{id}")
     public String deleteRecord(@PathVariable Long id) {
         worksRecordRepository.deleteById(id);
         return "redirect:/";
     }
 
-    // --- NEW FILE DOWNLOAD ENDPOINT ---
+    // --- FILE DOWNLOAD ENDPOINT ---
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
         try {
-            // Path where FileStorageService stores uploaded files
             Path filePath = Paths.get("uploads").resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
 
