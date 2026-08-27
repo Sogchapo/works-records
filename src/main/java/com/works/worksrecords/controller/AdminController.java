@@ -35,22 +35,41 @@ public class AdminController {
     }
 
     @PostMapping("/create")
-    public String createUser(@ModelAttribute User user, 
-                             @RequestParam(value = "isSuperadmin", defaultValue = "false") boolean isSuperadmin,
+    public String createUser(@RequestParam("fullName") String fullName,
+                             @RequestParam("username") String username,
+                             @RequestParam("password") String password,
+                             @RequestParam(value = "role", defaultValue = "EMPLOYEE") String role,
                              Model model) {
-        if (userRepository.existsByUsername(user.getUsername())) {
+
+        if (userRepository.existsByUsername(username)) {
             model.addAttribute("error", "Username already exists!");
+            model.addAttribute("user", new User());
             return "admin/create-user";
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        
-        // Use mutable HashSet for Hibernate JPA
-        if (isSuperadmin) {
-            user.setRoles(new HashSet<>(Set.of(User.Role.ROLE_USER, User.Role.ROLE_SUPERADMIN)));
-        } else {
-            user.setRoles(new HashSet<>(Set.of(User.Role.ROLE_USER)));
+        User user = new User();
+        user.setFullName(fullName);
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setEnabled(true);
+
+        Set<User.Role> roles = new HashSet<>();
+        roles.add(User.Role.ROLE_USER); // Base application access
+
+        switch (role.toUpperCase()) {
+            case "SUPERADMIN":
+                roles.add(User.Role.ROLE_SUPERADMIN);
+                break;
+            case "HOD":
+                roles.add(User.Role.ROLE_HOD);
+                break;
+            case "EMPLOYEE":
+            default:
+                roles.add(User.Role.ROLE_EMPLOYEE);
+                break;
         }
+
+        user.setRoles(roles);
 
         userRepository.save(user);
         return "redirect:/admin/users?success";
@@ -61,43 +80,67 @@ public class AdminController {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + id));
         model.addAttribute("user", user);
-        model.addAttribute("isSuperadmin", user.getRoles().contains(User.Role.ROLE_SUPERADMIN));
+        
+        // Determine primary role for selection dropdown
+        String currentRole = "EMPLOYEE";
+        if (user.getRoles().contains(User.Role.ROLE_SUPERADMIN)) {
+            currentRole = "SUPERADMIN";
+        } else if (user.getRoles().contains(User.Role.ROLE_HOD)) {
+            currentRole = "HOD";
+        }
+        
+        model.addAttribute("currentRole", currentRole);
         return "admin/edit-user";
     }
 
     @PostMapping("/update/{id}")
     public String updateUser(@PathVariable("id") Long id,
-                             @ModelAttribute User userDetails,
-                             @RequestParam(value = "isSuperadmin", defaultValue = "false") boolean isSuperadmin,
+                             @RequestParam("fullName") String fullName,
+                             @RequestParam("username") String username,
+                             @RequestParam(value = "role", defaultValue = "EMPLOYEE") String role,
                              @RequestParam(value = "newPassword", required = false) String newPassword,
+                             @RequestParam(value = "active", defaultValue = "true") boolean active,
                              Model model) {
+
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + id));
 
-        // Check for username conflict if changed
-        if (!existingUser.getUsername().equals(userDetails.getUsername()) &&
-                userRepository.existsByUsername(userDetails.getUsername())) {
+        // Check for username collision if changed
+        if (!existingUser.getUsername().equals(username) &&
+                userRepository.existsByUsername(username)) {
             model.addAttribute("error", "Username already exists!");
             model.addAttribute("user", existingUser);
-            model.addAttribute("isSuperadmin", isSuperadmin);
+            model.addAttribute("currentRole", role);
             return "admin/edit-user";
         }
 
-        existingUser.setFullName(userDetails.getFullName());
-        existingUser.setUsername(userDetails.getUsername());
-        existingUser.setActive(userDetails.isActive());
+        existingUser.setFullName(fullName);
+        existingUser.setUsername(username);
+        existingUser.setActive(active);
 
-        // Update password only if a new non-empty password was provided
+        // Update password if a new one was provided
         if (newPassword != null && !newPassword.trim().isEmpty()) {
             existingUser.setPassword(passwordEncoder.encode(newPassword));
         }
 
-        // Use mutable HashSet to allow Hibernate collection manipulation
-        if (isSuperadmin) {
-            existingUser.setRoles(new HashSet<>(Set.of(User.Role.ROLE_USER, User.Role.ROLE_SUPERADMIN)));
-        } else {
-            existingUser.setRoles(new HashSet<>(Set.of(User.Role.ROLE_USER)));
+        // Re-map role assignments
+        Set<User.Role> roles = new HashSet<>();
+        roles.add(User.Role.ROLE_USER);
+
+        switch (role.toUpperCase()) {
+            case "SUPERADMIN":
+                roles.add(User.Role.ROLE_SUPERADMIN);
+                break;
+            case "HOD":
+                roles.add(User.Role.ROLE_HOD);
+                break;
+            case "EMPLOYEE":
+            default:
+                roles.add(User.Role.ROLE_EMPLOYEE);
+                break;
         }
+
+        existingUser.setRoles(roles);
 
         userRepository.save(existingUser);
         return "redirect:/admin/users?updated";

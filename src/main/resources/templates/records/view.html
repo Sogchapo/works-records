@@ -2,85 +2,95 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Record - Works Records System</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
-    <div class="flex h-screen print:h-auto">
-        <aside class="w-64 bg-slate-900 text-white flex flex-col p-4 print:hidden">
-            <h1 class="text-xl font-bold mb-8 text-teal-400">Works Records</h1>
-            <nav class="space-y-3">
-                <a href="/" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Dashboard</a>
-                <a href="/records/register" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Register Record</a>
-                <a href="/reports" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Reports & Audit</a>
+    <div class="flex flex-col md:flex-row min-h-screen print:h-auto">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-slate-900 text-white flex flex-col p-4 print:hidden">
+            <h1 class="text-xl font-bold mb-4 md:mb-8 text-teal-400">Works Records</h1>
+            <nav class="flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-2 md:gap-0 md:space-y-3 pb-2 md:pb-0">
+                <a href="/" class="whitespace-nowrap py-2 px-3 md:px-4 rounded hover:bg-slate-800 text-gray-300 font-medium text-sm md:text-base">Dashboard</a>
+                <a href="/records/register" class="whitespace-nowrap py-2 px-3 md:px-4 rounded hover:bg-slate-800 text-gray-300 font-medium text-sm md:text-base">Register Record</a>
+                <a href="/reports" class="whitespace-nowrap py-2 px-3 md:px-4 rounded hover:bg-slate-800 text-gray-300 font-medium text-sm md:text-base">Reports & Audit</a>
             </nav>
         </aside>
 
-        <main class="flex-1 p-8 overflow-y-auto">
-            <div class="flex justify-between items-center mb-6 print:hidden">
-                <h2 class="text-2xl font-bold text-gray-800">Record Details</h2>
-                <div class="flex items-center gap-3">
+        <!-- Main Content -->
+        <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+            <!-- Header & Action Buttons -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 print:hidden">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Record Details</h2>
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                     <a th:href="@{/records/edit/{id}(id=${record.id})}" 
-                       class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition text-sm">
+                       class="text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded shadow transition text-sm">
                         Edit Record
                     </a>
 
                     <a th:href="@{/records/delete/{id}(id=${record.id})}" 
                        onclick="return confirm('Are you sure you want to delete this record? This action cannot be undone.');"
-                       class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition text-sm">
+                       class="text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 px-4 rounded shadow transition text-sm">
                         Delete Record
                     </a>
 
-                    <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-800 text-white font-semibold py-2 px-4 rounded shadow transition text-sm">
+                    <button onclick="window.print()" class="text-center bg-slate-700 hover:bg-slate-800 text-white font-semibold py-2.5 px-4 rounded shadow transition text-sm">
                         Print / Save as PDF
                     </button>
                 </div>
             </div>
 
-            <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200 space-y-6">
-                <div class="border-b pb-4 flex justify-between items-start">
+            <!-- Details Card -->
+            <div class="bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow-sm border border-gray-200 space-y-6">
+                <!-- Title Bar & Status -->
+                <div class="border-b pb-4 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900" th:text="${record.propertyOwnerName}">Owner Name</h1>
-                        <p class="text-sm text-gray-500" th:text="'Application No: ' + ${record.applicationNumber}">App No</p>
+                        <h1 class="text-xl sm:text-2xl font-bold text-gray-900" th:text="${record.propertyOwnerName}">Owner Name</h1>
+                        <p class="text-xs sm:text-sm text-gray-500" th:text="'Application No: ' + ${record.applicationNumber}">App No</p>
                     </div>
-                    <span class="px-3 py-1 rounded text-sm font-semibold bg-teal-100 text-teal-800" th:text="${record.status}">APPROVED</span>
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded text-xs sm:text-sm font-semibold bg-teal-100 text-teal-800" th:text="${record.status}">APPROVED</span>
+                    </div>
                 </div>
 
+                <!-- Property Information -->
                 <div>
-                    <h3 class="text-md font-bold text-gray-700 uppercase tracking-wider mb-3">Property Information</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-                        <div><span class="text-gray-500 block">Applicant:</span> <p class="font-medium" th:text="${record.applicantName}"></p></div>
-                        <div><span class="text-gray-500 block">Contact:</span> <p class="font-medium" th:text="${record.contactNumber}"></p></div>
-                        <div><span class="text-gray-500 block">Plot Number:</span> <p class="font-medium" th:text="${record.plotNumber}"></p></div>
-                        <div><span class="text-gray-500 block">Digital Address:</span> <p class="font-medium" th:text="${record.digitalAddress}"></p></div>
-                        <div><span class="text-gray-500 block">GPS Coordinates:</span> <p class="font-medium" th:text="${record.gpsCoordinates}"></p></div>
-                        <div><span class="text-gray-500 block">Permit No:</span> <p class="font-medium" th:text="${record.permitNumber}"></p></div>
-                        <div><span class="text-gray-500 block">Building Permit No:</span> <p class="font-medium" th:text="${record.buildingPermitNumber}"></p></div>
-                        <div><span class="text-gray-500 block">Land Title No:</span> <p class="font-medium" th:text="${record.landTitleNumber}"></p></div>
+                    <h3 class="text-xs sm:text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">Property Information</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                        <div><span class="text-gray-500 block text-xs">Applicant:</span> <p class="font-medium text-gray-800" th:text="${record.applicantName}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">Contact:</span> <p class="font-medium text-gray-800" th:text="${record.contactNumber}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">Plot Number:</span> <p class="font-medium text-gray-800" th:text="${record.plotNumber}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">Digital Address:</span> <p class="font-medium text-gray-800" th:text="${record.digitalAddress}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">GPS Coordinates:</span> <p class="font-medium text-gray-800" th:text="${record.gpsCoordinates}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">Permit No:</span> <p class="font-medium text-gray-800" th:text="${record.permitNumber}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">Building Permit No:</span> <p class="font-medium text-gray-800" th:text="${record.buildingPermitNumber}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">Land Title No:</span> <p class="font-medium text-gray-800" th:text="${record.landTitleNumber}"></p></div>
                     </div>
                 </div>
 
+                <!-- Location Details -->
                 <div class="border-t pt-4">
-                    <h3 class="text-md font-bold text-gray-700 uppercase tracking-wider mb-3">Location</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-                        <div><span class="text-gray-500 block">Region:</span> <p class="font-medium" th:text="${record.region}"></p></div>
-                        <div><span class="text-gray-500 block">District:</span> <p class="font-medium" th:text="${record.district}"></p></div>
-                        <div><span class="text-gray-500 block">Town:</span> <p class="font-medium" th:text="${record.town}"></p></div>
-                        <div><span class="text-gray-500 block">Electoral Area:</span> <p class="font-medium" th:text="${record.electoralArea}"></p></div>
-                        <div><span class="text-gray-500 block">Street Name:</span> <p class="font-medium" th:text="${record.streetName}"></p></div>
+                    <h3 class="text-xs sm:text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">Location</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                        <div><span class="text-gray-500 block text-xs">Region:</span> <p class="font-medium text-gray-800" th:text="${record.region}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">District:</span> <p class="font-medium text-gray-800" th:text="${record.district}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">Town:</span> <p class="font-medium text-gray-800" th:text="${record.town}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">Electoral Area:</span> <p class="font-medium text-gray-800" th:text="${record.electoralArea}"></p></div>
+                        <div><span class="text-gray-500 block text-xs">Street Name:</span> <p class="font-medium text-gray-800" th:text="${record.streetName}"></p></div>
                     </div>
                 </div>
 
-                <!-- PROJECT & FINANCIAL INFORMATION SECTION -->
+                <!-- Project & Financial Information -->
                 <div class="border-t pt-4">
-                    <h3 class="text-md font-bold text-gray-700 uppercase tracking-wider mb-3">Project & Financial Information</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                    <h3 class="text-xs sm:text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">Project & Financial Information</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                         <div>
-                            <span class="text-gray-500 block">Development Type:</span>
-                            <p class="font-medium" th:text="${record.developmentType}">RESIDENTIAL</p>
+                            <span class="text-gray-500 block text-xs">Development Type:</span>
+                            <p class="font-medium text-gray-800" th:text="${record.developmentType}">RESIDENTIAL</p>
                         </div>
                         <div>
-                            <span class="text-gray-500 block">Amount Paid:</span>
+                            <span class="text-gray-500 block text-xs">Amount Paid:</span>
                             <p class="font-semibold text-teal-700" 
                                th:text="${record.amountPaid != null} ? 'GH₵ ' + ${#numbers.formatDecimal(record.amountPaid, 1, 'COMMA', 2, 'POINT')} : 'GH₵ 0.00'">
                                 GH₵ 0.00
@@ -89,17 +99,18 @@
                     </div>
                 </div>
 
+                <!-- Uploaded Documents -->
                 <div class="border-t pt-4 print:hidden">
-                    <h3 class="text-md font-bold text-gray-700 uppercase tracking-wider mb-3">Uploaded Documents</h3>
+                    <h3 class="text-xs sm:text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">Uploaded Documents</h3>
                     <div th:if="${#lists.isEmpty(record.documents)}" class="text-sm text-gray-500">No documents attached.</div>
-                    <ul th:unless="${#lists.isEmpty(record.documents)}" class="divide-y border rounded-md">
-                        <li th:each="doc : ${record.documents}" class="p-3 flex justify-between items-center text-sm">
+                    <ul th:unless="${#lists.isEmpty(record.documents)}" class="divide-y border rounded-md bg-gray-50">
+                        <li th:each="doc : ${record.documents}" class="p-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-sm">
                             <div>
                                 <span class="font-semibold text-gray-800" th:text="${doc.documentCategory}">Category</span>
-                                <span class="text-gray-500 text-xs block" th:text="${doc.fileName}">file.pdf</span>
+                                <span class="text-gray-500 text-xs block truncate max-w-xs sm:max-w-md" th:text="${doc.fileName}">file.pdf</span>
                             </div>
                             <a th:href="@{'/records/download/' + ${#strings.replace(doc.filePath, '/uploads/', '')}}" 
-                               class="text-teal-600 font-semibold hover:underline bg-teal-50 px-3 py-1 rounded border border-teal-200 shadow-sm">
+                               class="inline-block text-center text-teal-600 font-semibold hover:underline bg-white px-3 py-1.5 rounded border border-teal-200 shadow-sm text-xs">
                                 Download File
                             </a>
                         </li>

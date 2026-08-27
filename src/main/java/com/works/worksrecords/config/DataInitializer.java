@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -24,12 +25,12 @@ public class DataInitializer implements CommandLineRunner {
         if (!userRepository.existsByUsername("superadmin")) {
             User admin = new User();
             admin.setUsername("superadmin");
-            admin.setPassword(passwordEncoder.encode("admin123")); // Default password
+            admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setFullName("Super Administrator");
-            admin.setRoles(Set.of(User.Role.ROLE_SUPERADMIN, User.Role.ROLE_USER));
+            admin.setRoles(new HashSet<>(Set.of(User.Role.ROLE_SUPERADMIN, User.Role.ROLE_USER)));
             
             userRepository.save(admin);
-            System.out.println(">>> Superadmin user created automatically. Username: superadmin / Password: admin123");
+            System.out.println(">>> Superadmin user created automatically.");
         }
     }
 }

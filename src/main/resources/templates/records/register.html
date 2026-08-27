@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register New Record - Works Records System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -20,79 +21,86 @@
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
-    <div class="flex h-screen">
-        <aside class="w-64 bg-slate-900 text-white flex flex-col p-4">
-            <h1 class="text-xl font-bold mb-8 text-teal-400">Works Records</h1>
-            <nav class="space-y-3">
-                <a href="/" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Dashboard</a>
-                <a href="/records/register" class="block py-2 px-4 rounded bg-slate-800 text-teal-300 font-semibold">Register Record</a>
-                <a href="/reports" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Reports & Audit</a>
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-slate-900 text-white flex flex-col p-4">
+            <h1 class="text-xl font-bold mb-4 md:mb-8 text-teal-400">Works Records</h1>
+            <nav class="flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-2 md:gap-0 md:space-y-3 pb-2 md:pb-0">
+                <a href="/" class="whitespace-nowrap py-2 px-3 md:px-4 rounded hover:bg-slate-800 text-gray-300 font-medium text-sm md:text-base">Dashboard</a>
+                <a href="/records/register" class="whitespace-nowrap py-2 px-3 md:px-4 rounded bg-slate-800 text-teal-300 font-semibold text-sm md:text-base">Register Record</a>
+                <a href="/reports" class="whitespace-nowrap py-2 px-3 md:px-4 rounded hover:bg-slate-800 text-gray-300 font-medium text-sm md:text-base">Reports & Audit</a>
             </nav>
         </aside>
 
-        <main class="flex-1 p-8 overflow-y-auto bg-page">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Register New Record</h2>
+        <!-- Main Content -->
+        <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto bg-page">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Register New Record</h2>
+                <a href="/" class="text-gray-600 hover:text-gray-800 font-medium text-sm">← Back to Dashboard</a>
+            </div>
 
-            <form th:action="@{/records/save}" th:object="${record}" method="post" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-sm space-y-6">
+            <form th:action="@{/records/save}" th:object="${record}" method="post" enctype="multipart/form-data" class="bg-white p-4 sm:p-6 rounded-lg shadow-sm space-y-6">
                 
+                <!-- Property Information -->
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Property Information</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-gray-800 border-b pb-2 mb-4">Property Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Property Owner's Name</label>
-                            <input type="text" th:field="*{propertyOwnerName}" required class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Property Owner's Name <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{propertyOwnerName}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Applicant Name</label>
-                            <input type="text" th:field="*{applicantName}" class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Applicant Name <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{applicantName}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Contact Number</label>
-                            <input type="text" th:field="*{contactNumber}" required class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Contact Number <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{contactNumber}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Plot Number</label>
-                            <input type="text" th:field="*{plotNumber}" required class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Plot Number <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{plotNumber}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Digital Address</label>
-                            <input type="text" th:field="*{digitalAddress}" class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Digital Address <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{digitalAddress}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">GPS Coordinates (Optional)</label>
-                            <input type="text" th:field="*{gpsCoordinates}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{gpsCoordinates}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Permit Number</label>
-                            <input type="text" th:field="*{permitNumber}" class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Permit Number <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{permitNumber}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Building Permit Number</label>
-                            <input type="text" th:field="*{buildingPermitNumber}" class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Building Permit Number <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{buildingPermitNumber}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Application Number</label>
-                            <input type="text" th:field="*{applicationNumber}" class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Application Number <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{applicationNumber}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Land Title Number (Optional)</label>
-                            <input type="text" th:field="*{landTitleNumber}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{landTitleNumber}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                     </div>
                 </div>
 
+                <!-- Location Details -->
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Location Details</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-gray-800 border-b pb-2 mb-4">Location Details</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Region</label>
-                            <select th:field="*{region}" class="mt-1 w-full p-2 border rounded-md bg-gray-50">
+                            <label class="block text-sm font-medium text-gray-700">Region <span class="text-red-500">*</span></label>
+                            <select th:field="*{region}" required class="mt-1 w-full p-2.5 border rounded-md bg-gray-50 text-sm">
                                 <option value="Ashanti Region">Ashanti Region</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">District / Sub-Metro</label>
-                            <select th:field="*{district}" required class="mt-1 w-full p-2 border rounded-md bg-white focus:ring-2 focus:ring-teal-500">
+                            <label class="block text-sm font-medium text-gray-700">District / Sub-Metro <span class="text-red-500">*</span></label>
+                            <select th:field="*{district}" required class="mt-1 w-full p-2.5 border rounded-md bg-white focus:ring-2 focus:ring-teal-500 text-sm">
                                 <option value="">-- Select District --</option>
                                 <option value="Bantama">Bantama</option>
                                 <option value="Manhyia North">Manhyia North</option>
@@ -102,26 +110,27 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Town</label>
-                            <input type="text" th:field="*{town}" class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Town <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{town}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Electoral Area</label>
-                            <input type="text" th:field="*{electoralArea}" class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Electoral Area <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{electoralArea}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Street Name</label>
-                            <input type="text" th:field="*{streetName}" class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Street Name <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{streetName}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                     </div>
                 </div>
 
+                <!-- Project & Financial Information -->
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Project & Financial Information</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-gray-800 border-b pb-2 mb-4">Project & Financial Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Type of Development</label>
-                            <select th:field="*{developmentType}" class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Type of Development <span class="text-red-500">*</span></label>
+                            <select th:field="*{developmentType}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                                 <option value="RESIDENTIAL">Residential</option>
                                 <option value="COMMERCIAL">Commercial</option>
                                 <option value="INDUSTRIAL">Industrial</option>
@@ -129,8 +138,9 @@
                                 <option value="MIXED_USE">Mixed Use</option>
                             </select>
                         </div>
+
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Amount Paid (GH₵)</label>
+                            <label class="block text-sm font-medium text-gray-700">Amount Paid (GH₵) <span class="text-red-500">*</span></label>
                             <div class="mt-1 relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <span class="text-gray-500 sm:text-sm font-semibold">GH₵</span>
@@ -140,18 +150,20 @@
                                        min="0" 
                                        th:field="*{amountPaid}" 
                                        placeholder="0.00" 
-                                       class="pl-14 w-full p-2 border rounded-md focus:ring-2 focus:ring-teal-500">
+                                       required
+                                       class="pl-14 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Upload Documents -->
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Upload Documents</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-gray-800 border-b pb-2 mb-4">Upload Documents</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Document Type</label>
-                            <select name="categories" class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Document Type <span class="text-red-500">*</span></label>
+                            <select name="categories" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                                 <option value="Site Plan">Site Plan</option>
                                 <option value="Building Plan">Building Plan</option>
                                 <option value="Permit">Permit</option>
@@ -162,14 +174,17 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">File Attachment (PDF, JPG, PNG)</label>
-                            <input type="file" name="files" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 w-full p-1.5 border rounded-md bg-gray-50">
+                            <label class="block text-sm font-medium text-gray-700">File Attachment (PDF, JPG, PNG) <span class="text-red-500">*</span></label>
+                            <input type="file" name="files" accept=".pdf,.jpg,.jpeg,.png" required class="mt-1 w-full p-2 border rounded-md bg-gray-50 text-sm">
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-4 text-right">
-                    <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-6 rounded-md shadow">
+                <div class="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 border-t">
+                    <a href="/" class="w-full sm:w-auto text-center bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2.5 px-6 rounded-md shadow text-sm">
+                        Cancel
+                    </a>
+                    <button type="submit" class="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 px-6 rounded-md shadow text-sm">
                         Save & Register Record
                     </button>
                 </div>

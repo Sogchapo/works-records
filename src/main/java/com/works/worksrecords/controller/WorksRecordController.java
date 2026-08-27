@@ -9,6 +9,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,7 @@ public class WorksRecordController {
                              @RequestParam(value = "files", required = false) MultipartFile[] files,
                              @RequestParam(value = "categories", required = false) String[] categories) {
 
+        // Force default status to PENDING for new registrations
         if (record.getStatus() == null) {
             record.setStatus(WorksRecord.RecordStatus.PENDING);
         }
@@ -101,10 +103,23 @@ public class WorksRecordController {
     public String updateRecord(@PathVariable Long id,
                                @ModelAttribute WorksRecord updatedRecord,
                                @RequestParam(value = "files", required = false) MultipartFile[] files,
-                               @RequestParam(value = "categories", required = false) String[] categories) {
+                               @RequestParam(value = "categories", required = false) String[] categories,
+                               Authentication authentication) {
 
         WorksRecord existingRecord = worksRecordRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Record ID: " + id));
+
+        // Check if current authenticated user has ROLE_HOD authority
+        boolean isHod = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_HOD"));
+
+        // Update amountPaid and status ONLY if the user is HOD
+        if (isHod) {
+            existingRecord.setAmountPaid(updatedRecord.getAmountPaid());
+            if (updatedRecord.getStatus() != null) {
+                existingRecord.setStatus(updatedRecord.getStatus());
+            }
+        }
 
         existingRecord.setPropertyOwnerName(updatedRecord.getPropertyOwnerName());
         existingRecord.setApplicantName(updatedRecord.getApplicantName());
@@ -116,14 +131,12 @@ public class WorksRecordController {
         existingRecord.setBuildingPermitNumber(updatedRecord.getBuildingPermitNumber());
         existingRecord.setApplicationNumber(updatedRecord.getApplicationNumber());
         existingRecord.setLandTitleNumber(updatedRecord.getLandTitleNumber());
-        existingRecord.setAmountPaid(updatedRecord.getAmountPaid());
         existingRecord.setRegion(updatedRecord.getRegion());
         existingRecord.setDistrict(updatedRecord.getDistrict());
         existingRecord.setTown(updatedRecord.getTown());
         existingRecord.setElectoralArea(updatedRecord.getElectoralArea());
         existingRecord.setStreetName(updatedRecord.getStreetName());
         existingRecord.setDevelopmentType(updatedRecord.getDevelopmentType());
-        existingRecord.setStatus(updatedRecord.getStatus());
 
         // Process new uploaded files appended during edit
         if (files != null && files.length > 0) {

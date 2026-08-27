@@ -29,6 +29,8 @@ public class User {
 
     public enum Role {
         ROLE_USER,
+        ROLE_EMPLOYEE,
+        ROLE_HOD,
         ROLE_SUPERADMIN
     }
 

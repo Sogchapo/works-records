@@ -22,7 +22,8 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/videos/**", "/favicon.ico").permitAll()
-                .requestMatchers("/admin/**").hasAuthority("ROLE_SUPERADMIN") // Only Superadmin can access user management
+                // Superadmin and Head of Department can access user management
+                .requestMatchers("/admin/**").hasAnyAuthority("ROLE_SUPERADMIN", "ROLE_HOD")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

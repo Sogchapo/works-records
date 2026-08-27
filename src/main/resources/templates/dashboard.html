@@ -3,6 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Works Records System - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -21,39 +22,31 @@
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
-    <div class="flex h-screen overflow-hidden">
-        <aside class="w-64 bg-slate-900 text-white flex flex-col p-4 justify-between h-full z-10 flex-shrink-0">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-slate-900 text-white flex flex-col p-4 justify-between z-10 flex-shrink-0">
             <div>
-                <h1 class="text-xl font-bold mb-8 text-teal-400">Works Records</h1>
+                <h1 class="text-xl font-bold mb-4 md:mb-8 text-teal-400">Works Records</h1>
 
-                <!-- Navigation Dropdown -->
-                <div class="relative inline-block w-full text-left" id="navigationDropdown">
-                    <button id="menuButton" onclick="toggleMenu()" class="w-full flex items-center justify-between py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700/80 text-teal-300 font-semibold border border-slate-700/60 shadow-md transition-all duration-200">
-                        <span>Menu</span>
-                        <svg class="w-5 h-5 text-gray-400 hover:text-white transition" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                        </svg>
-                    </button>
-
-                    <div id="dropdownMenu" class="hidden absolute left-0 mt-2 w-full bg-slate-800/95 backdrop-blur-md rounded-xl shadow-xl border border-slate-700/70 p-1.5 space-y-1 z-50 transition-all duration-200">
-                        <a href="/" class="block py-2 px-3 rounded-lg bg-slate-700/50 text-teal-300 font-semibold text-sm hover:bg-slate-700 transition">
-                            Dashboard
-                        </a>
-                        <a href="/records/register" class="block py-2 px-3 rounded-lg text-gray-300 hover:text-white hover:bg-slate-700 text-sm transition">
-                            Register Record
-                        </a>
-                        <a href="/reports" class="block py-2 px-3 rounded-lg text-gray-300 hover:text-white hover:bg-slate-700 text-sm transition">
-                            Reports & Audit
-                        </a>
-                        <a sec:authorize="hasRole('SUPERADMIN')" href="/admin/users" class="block py-2 px-3 rounded-lg text-yellow-400 font-medium hover:bg-slate-700 text-sm transition">
-                            User Management
-                        </a>
-                    </div>
-                </div>
+                <!-- Direct Bold Navigation -->
+                <nav class="flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-2 md:gap-0 md:space-y-2 pb-2 md:pb-0">
+                    <a href="/" class="whitespace-nowrap py-2 px-3 md:px-4 rounded-xl bg-slate-800 text-teal-400 font-bold text-sm hover:bg-slate-700 transition">
+                        Dashboard
+                    </a>
+                    <a href="/records/register" class="whitespace-nowrap py-2 px-3 md:px-4 rounded-xl text-gray-300 font-bold text-sm hover:text-white hover:bg-slate-800 transition">
+                        Register Record
+                    </a>
+                    <a href="/reports" class="whitespace-nowrap py-2 px-3 md:px-4 rounded-xl text-gray-300 font-bold text-sm hover:text-white hover:bg-slate-800 transition">
+                        Reports & Audit
+                    </a>
+                    <a sec:authorize="hasRole('SUPERADMIN')" href="/admin/users" class="whitespace-nowrap py-2 px-3 md:px-4 rounded-xl text-yellow-400 font-bold text-sm hover:bg-slate-800 transition">
+                        User Management
+                    </a>
+                </nav>
             </div>
 
-            <form th:action="@{/logout}" method="post" class="pt-4 border-t border-slate-800">
-                <button type="submit" class="w-full text-left py-2 px-4 rounded hover:bg-red-900/40 text-red-400 text-sm font-semibold flex items-center gap-2 transition">
+            <form th:action="@{/logout}" method="post" class="pt-3 md:pt-4 border-t border-slate-800 mt-2 md:mt-0">
+                <button type="submit" class="w-full text-left py-2 px-3 md:px-4 rounded hover:bg-red-900/40 text-red-400 text-sm font-bold flex items-center gap-2 transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                     </svg>
@@ -62,11 +55,13 @@
             </form>
         </aside>
 
-        <main class="flex-1 p-8 overflow-y-auto bg-dashboard">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-                <h2 class="text-2xl font-bold text-gray-800">Dashboard</h2>
+        <!-- Main Content Area -->
+        <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto bg-dashboard">
+            <!-- Header & Search -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Dashboard</h2>
 
-                <form th:action="@{/records/search}" method="get" class="flex items-center gap-2 w-full md:w-80">
+                <form th:action="@{/records/search}" method="get" class="flex items-center gap-2 w-full sm:w-80">
                     <div class="relative w-full">
                         <input type="text" name="query" placeholder="Search records..." 
                                class="w-full pl-9 pr-4 py-2 text-sm bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
@@ -74,79 +69,68 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                     </div>
-                    <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow transition">
+                    <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow transition whitespace-nowrap">
                         Search
                     </button>
                 </form>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white/90 backdrop-blur-md p-5 rounded-lg shadow-sm border-l-4 border-blue-500">
-                    <p class="text-gray-500 text-sm">Total Records</p>
-                    <p class="text-3xl font-bold text-gray-800" th:text="${totalRecords}">0</p>
+            <!-- Overview Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+                <div class="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-lg shadow-sm border-l-4 border-blue-500">
+                    <p class="text-gray-500 text-xs sm:text-sm font-medium">Total Records</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-gray-800 mt-1" th:text="${totalRecords}">0</p>
                 </div>
-                <div class="bg-white/90 backdrop-blur-md p-5 rounded-lg shadow-sm border-l-4 border-green-500">
-                    <p class="text-gray-500 text-sm">Added Today</p>
-                    <p class="text-3xl font-bold text-gray-800" th:text="${addedToday}">0</p>
+                <div class="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-lg shadow-sm border-l-4 border-green-500">
+                    <p class="text-gray-500 text-xs sm:text-sm font-medium">Added Today</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-gray-800 mt-1" th:text="${addedToday}">0</p>
                 </div>
-                <div class="bg-white/90 backdrop-blur-md p-5 rounded-lg shadow-sm border-l-4 border-yellow-500">
-                    <p class="text-gray-500 text-sm">Pending Approval</p>
-                    <p class="text-3xl font-bold text-gray-800" th:text="${pendingRecords}">0</p>
+                <div class="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                    <p class="text-gray-500 text-xs sm:text-sm font-medium">Pending Approval</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-gray-800 mt-1" th:text="${pendingRecords}">0</p>
                 </div>
-                <div class="bg-white/90 backdrop-blur-md p-5 rounded-lg shadow-sm border-l-4 border-teal-500">
-                    <p class="text-gray-500 text-sm">Approved Permits</p>
-                    <p class="text-3xl font-bold text-gray-800" th:text="${approvedRecords}">0</p>
+                <div class="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-lg shadow-sm border-l-4 border-teal-500">
+                    <p class="text-gray-500 text-xs sm:text-sm font-medium">Approved Permits</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-gray-800 mt-1" th:text="${approvedRecords}">0</p>
                 </div>
             </div>
 
-            <div class="bg-white/90 backdrop-blur-md p-6 rounded-lg shadow-sm">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Recent Uploads</h3>
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b text-gray-600 text-sm bg-gray-50/80">
-                            <th class="p-3">Owner Name</th>
-                            <th class="p-3">Plot No.</th>
-                            <th class="p-3">Town</th>
-                            <th class="p-3">Status</th>
-                            <th class="p-3">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="rec : ${recentUploads}" class="border-b hover:bg-gray-50/80 text-sm text-gray-700">
-                            <td class="p-3 font-medium text-gray-900" th:text="${rec.propertyOwnerName}">John Doe</td>
-                            <td class="p-3" th:text="${rec.plotNumber}">PLT-102</td>
-                            <td class="p-3" th:text="${rec.town}">Kumasi</td>
-                            <td class="p-3">
-                                <span th:classappend="${rec.status.name() == 'APPROVED' ? 'bg-green-100 text-green-800' : (rec.status.name() == 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800')}"
-                                      class="px-2 py-1 text-xs font-semibold rounded"
-                                      th:text="${rec.status}">PENDING</span>
-                            </td>
-                            <td class="p-3">
-                                <a th:href="@{/records/view/{id}(id=${rec.id})}" class="text-teal-600 font-semibold hover:underline">View</a>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(recentUploads)}">
-                            <td colspan="5" class="p-4 text-center text-gray-500">No records found.</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Recent Uploads Table -->
+            <div class="bg-white/90 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-sm">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-4">Recent Uploads</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[550px]">
+                        <thead>
+                            <tr class="border-b text-gray-600 text-xs sm:text-sm bg-gray-50/80">
+                                <th class="p-3">Owner Name</th>
+                                <th class="p-3">Plot No.</th>
+                                <th class="p-3">Town</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3 text-right sm:text-left">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="rec : ${recentUploads}" class="border-b hover:bg-gray-50/80 text-sm text-gray-700">
+                                <td class="p-3 font-medium text-gray-900" th:text="${rec.propertyOwnerName}">John Doe</td>
+                                <td class="p-3 whitespace-nowrap" th:text="${rec.plotNumber}">PLT-102</td>
+                                <td class="p-3 whitespace-nowrap" th:text="${rec.town}">Kumasi</td>
+                                <td class="p-3 whitespace-nowrap">
+                                    <span th:classappend="${rec.status.name() == 'APPROVED' ? 'bg-green-100 text-green-800' : (rec.status.name() == 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800')}"
+                                          class="px-2 py-1 text-xs font-semibold rounded"
+                                          th:text="${rec.status}">PENDING</span>
+                                </td>
+                                <td class="p-3 whitespace-nowrap text-right sm:text-left">
+                                    <a th:href="@{/records/view/{id}(id=${rec.id})}" class="text-teal-600 font-semibold hover:underline">View</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(recentUploads)}">
+                                <td colspan="5" class="p-4 text-center text-gray-500">No records found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
-
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('dropdownMenu');
-            menu.classList.toggle('hidden');
-        }
-
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('navigationDropdown');
-            const menu = document.getElementById('dropdownMenu');
-            if (!dropdown.contains(event.target)) {
-                menu.classList.add('hidden');
-            }
-        });
-    </script>
 </body>
 </html>

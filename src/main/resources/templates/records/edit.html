@@ -1,87 +1,93 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Record - Works Records System</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
-    <div class="flex h-screen">
-        <aside class="w-64 bg-slate-900 text-white flex flex-col p-4">
-            <h1 class="text-xl font-bold mb-8 text-teal-400">Works Records</h1>
-            <nav class="space-y-3">
-                <a href="/" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Dashboard</a>
-                <a href="/records/register" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Register Record</a>
-                <a href="/reports" class="block py-2 px-4 rounded hover:bg-slate-800 text-gray-300">Reports & Audit</a>
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-slate-900 text-white flex flex-col p-4">
+            <h1 class="text-xl font-bold mb-4 md:mb-8 text-teal-400">Works Records</h1>
+            <nav class="flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-2 md:gap-0 md:space-y-3 pb-2 md:pb-0">
+                <a href="/" class="whitespace-nowrap py-2 px-3 md:px-4 rounded hover:bg-slate-800 text-gray-300 font-medium text-sm md:text-base">Dashboard</a>
+                <a href="/records/register" class="whitespace-nowrap py-2 px-3 md:px-4 rounded hover:bg-slate-800 text-gray-300 font-medium text-sm md:text-base">Register Record</a>
+                <a href="/reports" class="whitespace-nowrap py-2 px-3 md:px-4 rounded hover:bg-slate-800 text-gray-300 font-medium text-sm md:text-base">Reports & Audit</a>
             </nav>
         </aside>
 
-        <main class="flex-1 p-8 overflow-y-auto">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Edit Record</h2>
+        <!-- Main Content -->
+        <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Edit Record</h2>
                 <a th:href="@{/records/view/{id}(id=${record.id})}" class="text-gray-600 hover:text-gray-800 font-medium text-sm">← Back to Details</a>
             </div>
 
-            <form th:action="@{/records/update/{id}(id=${record.id})}" th:object="${record}" method="post" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-sm space-y-6">
+            <form th:action="@{/records/update/{id}(id=${record.id})}" th:object="${record}" method="post" enctype="multipart/form-data" class="bg-white p-4 sm:p-6 rounded-lg shadow-sm space-y-6">
                 
+                <!-- Property Information -->
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Property Information</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-gray-800 border-b pb-2 mb-4">Property Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Property Owner's Name</label>
-                            <input type="text" th:field="*{propertyOwnerName}" required class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Property Owner's Name <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{propertyOwnerName}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Applicant Name</label>
-                            <input type="text" th:field="*{applicantName}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{applicantName}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Contact Number</label>
-                            <input type="text" th:field="*{contactNumber}" required class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Contact Number <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{contactNumber}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Plot Number</label>
-                            <input type="text" th:field="*{plotNumber}" required class="mt-1 w-full p-2 border rounded-md">
+                            <label class="block text-sm font-medium text-gray-700">Plot Number <span class="text-red-500">*</span></label>
+                            <input type="text" th:field="*{plotNumber}" required class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Digital Address</label>
-                            <input type="text" th:field="*{digitalAddress}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{digitalAddress}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">GPS Coordinates (Optional)</label>
-                            <input type="text" th:field="*{gpsCoordinates}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{gpsCoordinates}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Permit Number</label>
-                            <input type="text" th:field="*{permitNumber}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{permitNumber}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Building Permit Number</label>
-                            <input type="text" th:field="*{buildingPermitNumber}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{buildingPermitNumber}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Application Number</label>
-                            <input type="text" th:field="*{applicationNumber}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{applicationNumber}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Land Title Number (Optional)</label>
-                            <input type="text" th:field="*{landTitleNumber}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{landTitleNumber}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                     </div>
                 </div>
 
+                <!-- Location Details -->
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Location Details</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-gray-800 border-b pb-2 mb-4">Location Details</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Region</label>
-                            <select th:field="*{region}" class="mt-1 w-full p-2 border rounded-md bg-gray-50">
+                            <select th:field="*{region}" class="mt-1 w-full p-2.5 border rounded-md bg-gray-50 text-sm">
                                 <option value="Ashanti Region">Ashanti Region</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">District / Sub-Metro</label>
-                            <select th:field="*{district}" required class="mt-1 w-full p-2 border rounded-md bg-white focus:ring-2 focus:ring-teal-500">
+                            <label class="block text-sm font-medium text-gray-700">District / Sub-Metro <span class="text-red-500">*</span></label>
+                            <select th:field="*{district}" required class="mt-1 w-full p-2.5 border rounded-md bg-white focus:ring-2 focus:ring-teal-500 text-sm">
                                 <option value="">-- Select District --</option>
                                 <option value="Bantama">Bantama</option>
                                 <option value="Manhyia North">Manhyia North</option>
@@ -92,25 +98,26 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Town</label>
-                            <input type="text" th:field="*{town}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{town}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Electoral Area</label>
-                            <input type="text" th:field="*{electoralArea}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{electoralArea}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Street Name</label>
-                            <input type="text" th:field="*{streetName}" class="mt-1 w-full p-2 border rounded-md">
+                            <input type="text" th:field="*{streetName}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                         </div>
                     </div>
                 </div>
 
+                <!-- Project & Financial Information -->
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Project & Financial Information</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-gray-800 border-b pb-2 mb-4">Project & Financial Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Type of Development</label>
-                            <select th:field="*{developmentType}" class="mt-1 w-full p-2 border rounded-md">
+                            <select th:field="*{developmentType}" class="mt-1 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
                                 <option value="RESIDENTIAL">Residential</option>
                                 <option value="COMMERCIAL">Commercial</option>
                                 <option value="INDUSTRIAL">Industrial</option>
@@ -118,27 +125,56 @@
                                 <option value="MIXED_USE">Mixed Use</option>
                             </select>
                         </div>
+
+                        <!-- Application Status Section -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Application Status</label>
-                            <select th:field="*{status}" class="mt-1 w-full p-2 border rounded-md bg-yellow-50 font-semibold text-gray-800">
+                            
+                            <!-- Editable Dropdown for HOD Only -->
+                            <select sec:authorize="hasAuthority('ROLE_HOD')" 
+                                    th:field="*{status}" 
+                                    class="mt-1 w-full p-2.5 border rounded-md bg-yellow-50 font-semibold text-gray-800 focus:ring-2 focus:ring-teal-500 text-sm">
                                 <option value="PENDING">PENDING</option>
                                 <option value="APPROVED">APPROVED</option>
                                 <option value="REJECTED">REJECTED</option>
                                 <option value="UNDER_REVIEW">UNDER REVIEW</option>
                             </select>
+
+                            <!-- Read-Only Field for Non-HOD Users -->
+                            <div sec:authorize="!hasAuthority('ROLE_HOD')">
+                                <input type="text" 
+                                       th:value="${record.status}" 
+                                       readonly 
+                                       class="mt-1 w-full p-2.5 border rounded-md bg-gray-100 text-gray-500 font-semibold cursor-not-allowed text-sm">
+                                <input type="hidden" th:field="*{status}" />
+                            </div>
                         </div>
+                        
+                        <!-- Amount Paid Section -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Amount Paid (GH₵)</label>
                             <div class="mt-1 relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <span class="text-gray-500 sm:text-sm font-semibold">GH₵</span>
                                 </div>
-                                <input type="number" 
+
+                                <!-- Editable Input for HOD Only -->
+                                <input sec:authorize="hasAuthority('ROLE_HOD')" 
+                                       type="number" 
                                        step="0.01" 
                                        min="0" 
                                        th:field="*{amountPaid}" 
                                        placeholder="0.00" 
-                                       class="pl-14 w-full p-2 border rounded-md focus:ring-2 focus:ring-teal-500">
+                                       class="pl-14 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-teal-500 text-sm">
+
+                                <!-- Read-Only Input for Non-HOD -->
+                                <input sec:authorize="!hasAuthority('ROLE_HOD')" 
+                                       type="number" 
+                                       step="0.01" 
+                                       min="0" 
+                                       th:field="*{amountPaid}" 
+                                       readonly 
+                                       class="pl-14 w-full p-2.5 border rounded-md bg-gray-100 text-gray-500 cursor-not-allowed text-sm">
                             </div>
                         </div>
                     </div>
@@ -146,18 +182,18 @@
 
                 <!-- Manage Documents Section -->
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Manage Attached Documents</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-gray-800 border-b pb-2 mb-4">Manage Attached Documents</h3>
 
                     <!-- Currently Attached Files -->
                     <div th:if="${not #lists.isEmpty(record.documents)}" class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Existing Documents:</label>
                         <ul class="divide-y border rounded-md bg-gray-50">
-                            <li th:each="doc : ${record.documents}" class="p-3 flex justify-between items-center text-sm">
+                            <li th:each="doc : ${record.documents}" class="p-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-sm">
                                 <div>
                                     <span class="font-semibold text-gray-800" th:text="${doc.documentCategory}">Category</span>
-                                    <span class="text-gray-500 text-xs block" th:text="${doc.fileName}">file.pdf</span>
+                                    <span class="text-gray-500 text-xs block truncate max-w-xs" th:text="${doc.fileName}">file.pdf</span>
                                 </div>
-                                <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-4 pt-1 sm:pt-0">
                                     <a th:href="@{'/records/download/' + ${#strings.replace(doc.filePath, '/uploads/', '')}}" 
                                        class="text-teal-600 font-semibold hover:underline text-xs">
                                         Download
@@ -175,10 +211,10 @@
                     <!-- Upload Additional / Replacement Files -->
                     <div class="space-y-3">
                         <label class="block text-sm font-medium text-gray-700">Upload New / Replacement Document:</label>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 border rounded-md">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-3.5 sm:p-4 border rounded-md">
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">Document Category</label>
-                                <select name="categories" class="w-full border rounded p-2 text-sm bg-white">
+                                <select name="categories" class="w-full border rounded p-2.5 text-sm bg-white focus:ring-2 focus:ring-teal-500">
                                     <option value="Site Plan">Site Plan</option>
                                     <option value="Building Permit">Building Permit</option>
                                     <option value="Land Title">Land Title</option>
@@ -188,17 +224,17 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">Select File</label>
-                                <input type="file" name="files" class="w-full border rounded p-1 text-sm bg-white">
+                                <input type="file" name="files" class="w-full border rounded p-2 text-sm bg-white">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-4 text-right flex justify-end gap-3">
-                    <a th:href="@{/records/view/{id}(id=${record.id})}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-6 rounded-md shadow">
+                <div class="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 border-t">
+                    <a th:href="@{/records/view/{id}(id=${record.id})}" class="w-full sm:w-auto text-center bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2.5 px-6 rounded-md shadow text-sm">
                         Cancel
                     </a>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md shadow">
+                    <button type="submit" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-md shadow text-sm">
                         Update Record
                     </button>
                 </div>
